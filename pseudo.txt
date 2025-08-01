@@ -1,0 +1,31 @@
+--operations--
+all of these functions takes 2 parameter and return the evaluated value
+MAKE add function
+    return sum of them
+
+MAKE subtract function
+    return parameter 1 - parameter 2
+
+MAKE multiply function
+    return parameter 1 * parameter 2
+
+MAKE divide function
+    return parameter 1 / parameter 2
+
+--operate--
+MAKE operate function, takes 2 operands and an operator
+    checks the operator
+    return the value return by a call of the corresponding function
+
+--buttons and display--
+MAKE buttons and display on html
+GET the nodes
+ADD eventlisteners to buttons, when clicked:
+    store value in an array
+    populate the display
+Display and store 0 first
+Display last item in the array
+When = button clicked, shows the final value, stores result as new whole
+When an operator is clicked, display new value, stores previous inp
+IF a number is clicked after =, restart calculation
+When back button pressed, remove last element from the array
