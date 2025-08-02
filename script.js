@@ -24,7 +24,7 @@ function operate(x,y,operator){
 }
 };
 function populate(x){
-    if (calcDisplay.textContent=="0" ||"-+/*".includes(mainArray.at(-1))){
+    if (calcDisplay.textContent=="0" ||"-+/*".includes(mainArray.at(-1))||logger.length==0){
         calcDisplay.textContent=""
     };
     calcDisplay.textContent+=x.target.textContent;
@@ -37,6 +37,7 @@ function operatorDetected(x){
     mainArray.push(calcDisplay.textContent);
     if (mainArray.length>3){
         mainArray.splice(0,mainArray.length, operate(mainArray[0], mainArray[2], mainArray[1]))
+        logger.length=0
     };
     mainArray.push(x.target.textContent)
     logger.push(1)
@@ -47,7 +48,27 @@ function equalClicked(){
     if (mainArray.length>=3){
         mainArray.splice(0,mainArray.length, operate(mainArray[0], mainArray[2], mainArray[1]))
     };
-    calcDisplay.textContent=mainArray[0]
+    calcDisplay.textContent=mainArray[0].toFixed(4)
+    logger.length=0
+}
+function addDecimal(){
+    if (logger.includes(3)) return;
+    calcDisplay.textContent+="."
+    logger.push(3)
+}
+function deleteLast(){
+    switch (logger.at(-1)){
+        case 0:
+        case 3:
+            calcDisplay.textContent=calcDisplay.textContent.slice(0, -1)
+            break
+        case 1:
+            mainArray.length=mainArray.length-1
+    }
+}
+function clear(){
+    logger.length=0;
+    mainArray.splice(0,mainArray.length,0)
 }
 
 let logger=[0];
@@ -56,10 +77,19 @@ const calcDisplay=document.querySelector("#display");
 let mainArray=[0];
 
 const numbers=document.querySelectorAll(".numbers");
-Array.from(numbers).forEach((x)=>x.addEventListener("click", populate));
+Array.from(numbers).forEach(x=>x.addEventListener("click", populate));
 
 const operators=document.querySelectorAll(".operators");
-Array.from(operators).forEach((x)=>x.addEventListener("click", operatorDetected))
+Array.from(operators).forEach(x=>x.addEventListener("click", operatorDetected))
 
 const equal=document.querySelector(".equal");
 equal.addEventListener("click", equalClicked )
+
+const decimal=document.querySelector(".decimal")
+decimal.addEventListener("click", addDecimal)
+
+const back=document.querySelector(".back")
+back.addEventListener("click", deleteLast)
+
+const clear=document.querySelector(".clear")
+clear.addEventListener("click", clear)
