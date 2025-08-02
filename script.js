@@ -23,19 +23,43 @@ function operate(x,y,operator){
             return divide(+x,+y)
 }
 };
+function populate(x){
+    if (calcDisplay.textContent=="0" ||"-+/*".includes(mainArray.at(-1))){
+        calcDisplay.textContent=""
+    };
+    calcDisplay.textContent+=x.target.textContent;
+    logger.push(0)
+};
 function operatorDetected(x){
-    mainArray[-1]=calcDisplay.textContent;
+    console.log(mainArray)
+    if ("-+/*".includes(mainArray.at(-1))) return;
+    if (mainArray.length==1){mainArray.length=0}
+    mainArray.push(calcDisplay.textContent);
     if (mainArray.length>3){
         mainArray.splice(0,mainArray.length, operate(mainArray[0], mainArray[2], mainArray[1]))
     };
-    mainArray.push(x)
+    mainArray.push(x.target.textContent)
+    logger.push(1)
+};
+function equalClicked(){
+    if (mainArray.length==1){mainArray.length=0}
+    if (logger.at(-1)==0){mainArray.push(calcDisplay.textContent)};
+    if (mainArray.length>=3){
+        mainArray.splice(0,mainArray.length, operate(mainArray[0], mainArray[2], mainArray[1]))
+    };
+    calcDisplay.textContent=mainArray[0]
 }
 
+let logger=[0];
+
 const calcDisplay=document.querySelector("#display");
-let mainArray=[calcDisplay.textContent];
+let mainArray=[0];
 
 const numbers=document.querySelectorAll(".numbers");
-Array.from(numbers).forEach((x)=>x.addEventListener("click", x=>calcDisplay.textContent+=x.target.textContent));
+Array.from(numbers).forEach((x)=>x.addEventListener("click", populate));
 
 const operators=document.querySelectorAll(".operators");
-Array.Array.from(operators).forEach((x)=>x.addEventListener("click", operatorDetected(x.target.textContent)))
+Array.from(operators).forEach((x)=>x.addEventListener("click", operatorDetected))
+
+const equal=document.querySelector(".equal");
+equal.addEventListener("click", equalClicked )
