@@ -65,10 +65,12 @@ function deleteLast(){
         case 1:
             mainArray.length=mainArray.length-1
     }
+    if (calcDisplay.textContent=="") calcDisplay.textContent="0"
 }
-function clear(){
+function clearAll(){
     logger.length=0;
     mainArray.splice(0,mainArray.length,0)
+    calcDisplay.textContent="0"
 }
 
 let logger=[0];
@@ -92,4 +94,4 @@ const back=document.querySelector(".back")
 back.addEventListener("click", deleteLast)
 
 const clear=document.querySelector(".clear")
-clear.addEventListener("click", clear)
+clear.addEventListener("click", clearAll)
