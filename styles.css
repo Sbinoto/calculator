@@ -20,6 +20,8 @@ body{
     flex: 4 1 324px;
     height:96px;
     font-size: 90px;
+    overflow: scroll;
+    text-align: right;
 
 
 }

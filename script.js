@@ -23,15 +23,22 @@ function operate(x,y,operator){
             return divide(+x,+y)
 }
 };
+function keyOrNode(x){
+    switch (x.type){
+    case "keydown":
+        return `${x.key}`
+    default:
+        return `${x.target.textContent}`
+}
+}
 function populate(x){
-    if (calcDisplay.textContent=="0" ||"-+/*".includes(mainArray.at(-1))||logger.length==0){
+    if (calcDisplay.textContent=="0" ||logger.at(-1)==1||logger.length==0){
         calcDisplay.textContent=""
     };
-    calcDisplay.textContent+=x.target.textContent;
+    calcDisplay.textContent+=keyOrNode(x);
     logger.push(0)
 };
 function operatorDetected(x){
-    console.log(mainArray)
     if ("-+/*".includes(mainArray.at(-1))) return;
     if (mainArray.length==1){mainArray.length=0}
     mainArray.push(calcDisplay.textContent);
@@ -39,7 +46,7 @@ function operatorDetected(x){
         mainArray.splice(0,mainArray.length, operate(mainArray[0], mainArray[2], mainArray[1]))
         logger.length=0
     };
-    mainArray.push(x.target.textContent)
+    mainArray.push(keyOrNode(x))
     logger.push(1)
 };
 function equalClicked(){
@@ -48,18 +55,17 @@ function equalClicked(){
     if (mainArray.length>=3){
         mainArray.splice(0,mainArray.length, operate(mainArray[0], mainArray[2], mainArray[1]))
     };
-    calcDisplay.textContent=mainArray[0].toFixed(4)
+    calcDisplay.textContent=mainArray[0].toFixed(4)==mainArray[0]?mainArray[0]:mainArray[0].toFixed(4)
     logger.length=0
 }
 function addDecimal(){
-    if (logger.includes(3)) return;
+    if (calcDisplay.textContent.includes(".")) return;
     calcDisplay.textContent+="."
-    logger.push(3)
+    logger.push(0)
 }
 function deleteLast(){
     switch (logger.at(-1)){
         case 0:
-        case 3:
             calcDisplay.textContent=calcDisplay.textContent.slice(0, -1)
             break
         case 1:
@@ -72,6 +78,31 @@ function clearAll(){
     mainArray.splice(0,mainArray.length,0)
     calcDisplay.textContent="0"
 }
+function interpretKey(x){
+    if ("1234567890".includes(x.key)){
+        populate(x)
+    }
+    else if ("-+*/".includes(x.key)){
+        operatorDetected(x)
+    }
+    else {switch (x.key){
+        case ".":
+            addDecimal()
+            break
+        case "Backspace":
+            deleteLast()
+            break
+        case "Enter":
+        case "=":
+            equalClicked()
+            break
+        case "Escape":
+            clearAll()
+            break
+    }}
+    
+}
+
 
 let logger=[0];
 
@@ -95,3 +126,5 @@ back.addEventListener("click", deleteLast)
 
 const clear=document.querySelector(".clear")
 clear.addEventListener("click", clearAll)
+
+document.addEventListener("keydown", interpretKey)
