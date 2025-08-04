@@ -39,10 +39,10 @@ function populate(x){
     logger.push(0)
 };
 function operatorDetected(x){
-    if ("-+/*".includes(mainArray.at(-1))) return;
+    if (logger.at(-1)==1) return;
     if (mainArray.length==1){mainArray.length=0}
     mainArray.push(calcDisplay.textContent);
-    if (mainArray.length>3){
+    if (mainArray.length>=3){
         mainArray.splice(0,mainArray.length, operate(mainArray[0], mainArray[2], mainArray[1]))
         logger.length=0
     };
